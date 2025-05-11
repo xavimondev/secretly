@@ -1,33 +1,42 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import "@/app/globals.css";
+import { Inter } from "next/font/google";
+import { JetBrains_Mono } from "next/font/google";
+import { ClerkProvider } from "@clerk/nextjs";
+import { dark } from "@clerk/themes";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
   subsets: ["latin"],
+  variable: "--font-inter",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
+  variable: "--font-jetbrains",
 });
 
-export const metadata: Metadata = {
-  title: "Secretly",
-  description: "Generate secrets",
+export const metadata = {
+  title: "Secretly - Secure Credential Management",
+  description:
+    "Secure credential and secrets management for developers and DevOps teams",
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`dark ${inter.variable} ${jetbrainsMono.variable} font-sans bg-background text-foreground`}
       >
-        {children}
+        <ClerkProvider
+          appearance={{
+            baseTheme: dark,
+          }}
+        >
+          <main>{children}</main>
+        </ClerkProvider>
       </body>
     </html>
   );
