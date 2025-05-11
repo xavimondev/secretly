@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Shield } from "lucide-react";
+import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 
 export function LandingHeader() {
   return (
@@ -14,12 +15,14 @@ export function LandingHeader() {
         </div>
         <div className="flex items-center gap-4">
           <div className="hidden md:flex gap-2">
-            <Button variant="ghost" asChild>
-              <Link href="/login">Log in</Link>
-            </Button>
-            <Button asChild>
-              <Link href="/register">Sign up</Link>
-            </Button>
+            <SignedOut>
+              <SignInButton>
+                <Button variant="default">Log In</Button>
+              </SignInButton>
+            </SignedOut>
+            <SignedIn>
+              <UserButton />
+            </SignedIn>
           </div>
         </div>
       </div>
