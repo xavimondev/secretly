@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { UserButton } from "@clerk/nextjs";
-import { Plus } from "lucide-react";
+import { Plus, UserIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { AddCredentialForm } from "./add-credential-form";
@@ -26,7 +26,11 @@ export function Header() {
             <Plus className="w-4 h-4" />
             <span className="hidden sm:inline">New Credential</span>
           </Button>
-          <UserButton />
+          <UserButton
+            userProfileMode="navigation"
+            userProfileUrl="/profile"
+            fallback={<UserIcon className="size-6" />}
+          />
         </div>
       </header>
 
