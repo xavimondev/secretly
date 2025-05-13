@@ -1,4 +1,7 @@
 "use client";
+import Link from "next/link";
+import { useParams, usePathname } from "next/navigation";
+import { Cog, Lock, LogOut, Shield, User } from "lucide-react";
 
 import {
   Sidebar,
@@ -15,13 +18,12 @@ import {
   SidebarSeparator,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { Cog, Home, Lock, LogOut, Shield, User, Users } from "lucide-react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 
 export function AppSidebar() {
+  const params = useParams<{ slug: string }>();
   const pathname = usePathname();
   const { state } = useSidebar();
+  const slug = params.slug;
 
   return (
     <Sidebar collapsible="offcanvas">
@@ -46,34 +48,10 @@ export function AppSidebar() {
               <SidebarMenuItem>
                 <SidebarMenuButton
                   asChild
-                  isActive={pathname === "/"}
-                  tooltip="Dashboard"
-                >
-                  <Link href="/">
-                    <Home className="w-4 h-4" />
-                    <span>Dashboard</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  asChild
-                  isActive={pathname === "/organizations"}
-                  tooltip="Organizations"
-                >
-                  <Link href="/organizations">
-                    <Users className="w-4 h-4" />
-                    <span>Organizations</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  asChild
-                  isActive={pathname === "/access-control"}
+                  isActive={pathname.includes("/${slug}/access-control")}
                   tooltip="Access Control"
                 >
-                  <Link href="/access-control">
+                  <Link href={`/organization/${slug}/access-control`}>
                     <Lock className="w-4 h-4" />
                     <span>Access Control</span>
                   </Link>
