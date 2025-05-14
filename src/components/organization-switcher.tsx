@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth, useOrganizationList } from "@clerk/nextjs";
 import { Check, ChevronsUpDown, Plus } from "lucide-react";
+import { useAuth, useOrganizationList } from "@clerk/nextjs";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -21,6 +21,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { AddOrganizationForm } from "./add-organization-form";
 
 export function OrganizationSwitcher() {
   // TODO: handle infinite
@@ -35,6 +36,7 @@ export function OrganizationSwitcher() {
   const { orgId } = useAuth();
   const router = useRouter();
 
+  const [openModal, setOpenModal] = useState(false);
   const [openPopover, setOpenPopover] = useState(false);
 
   function handleSelect(slug: string, orgId: string) {
@@ -43,6 +45,10 @@ export function OrganizationSwitcher() {
     setOpenPopover(false);
     setActive({ organization: orgId });
     router.push(`/organization/${slug}`);
+  }
+
+  function handleCreateNew() {
+    setOpenModal(true);
   }
 
   // TODO: update loading
@@ -60,7 +66,7 @@ export function OrganizationSwitcher() {
   return (
     <>
       {defaultOrganization == null ? (
-        <Button variant="default">
+        <Button variant="default" onClick={handleCreateNew}>
           <Plus className="mr-2 size-4" />
           Add Organization
         </Button>
@@ -112,7 +118,10 @@ export function OrganizationSwitcher() {
                 </CommandGroup>
                 <CommandSeparator />
                 <CommandGroup>
-                  <CommandItem className="text-primary cursor-pointer">
+                  <CommandItem
+                    onSelect={handleCreateNew}
+                    className="text-primary cursor-pointer"
+                  >
                     <Plus className="mr-2 h-4 w-4" />
                     Add organization
                   </CommandItem>
@@ -122,6 +131,8 @@ export function OrganizationSwitcher() {
           </PopoverContent>
         </Popover>
       )}
+
+      <AddOrganizationForm open={openModal} onOpenChange={setOpenModal} />
     </>
   );
 }
