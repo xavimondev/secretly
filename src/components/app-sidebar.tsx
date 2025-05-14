@@ -1,7 +1,8 @@
 "use client";
+
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
-import { Cog, Lock, LogOut, Shield, User } from "lucide-react";
+import { Building2, Lock, LogOut, Shield } from "lucide-react";
 
 import {
   Sidebar,
@@ -42,18 +43,26 @@ export function AppSidebar() {
       <SidebarSeparator />
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Navigation</SidebarGroupLabel>
+          <SidebarGroupLabel>Organization</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton
                   asChild
-                  isActive={pathname.includes("/${slug}/access-control")}
+                  isActive={pathname.includes(`/${slug}/access-control`)}
                   tooltip="Access Control"
                 >
                   <Link href={`/organization/${slug}/access-control`}>
                     <Lock className="w-4 h-4" />
                     <span>Access Control</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild tooltip="Profile">
+                  <Link href={`/organization/${slug}/profile`}>
+                    <Building2 className="w-4 h-4" />
+                    <span>Profile</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -64,7 +73,7 @@ export function AppSidebar() {
       <SidebarFooter className="mt-auto">
         <SidebarSeparator />
         <SidebarMenu>
-          <SidebarMenuItem>
+          {/* <SidebarMenuItem>
             <SidebarMenuButton
               asChild
               isActive={pathname === "/settings"}
@@ -75,13 +84,8 @@ export function AppSidebar() {
                 <span>Settings</span>
               </Link>
             </SidebarMenuButton>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarMenuButton tooltip="Profile">
-              <User className="w-4 h-4" />
-              <span>Profile</span>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
+          </SidebarMenuItem> */}
+
           <SidebarMenuItem>
             <SidebarMenuButton tooltip="Logout">
               <LogOut className="w-4 h-4" />
