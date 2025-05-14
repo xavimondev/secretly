@@ -13,8 +13,7 @@ export function Header() {
         <div className="flex items-center gap-2">
           <OrganizationSwitcher />
           <UserButton
-            userProfileMode="navigation"
-            userProfileUrl="/profile"
+            userProfileMode="modal"
             fallback={<UserIcon className="size-6" />}
           />
         </div>
