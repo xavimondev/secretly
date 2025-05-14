@@ -3,6 +3,8 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useOrganizationList } from "@clerk/nextjs";
+import { isClerkAPIResponseError } from "@clerk/nextjs/errors";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -68,14 +70,23 @@ export function AddOrganizationForm({
       });
 
       await setActive({ organization: res });
+
+      toast.success("Organization created");
+
       // closing modal
-      handleClose();
+      setTimeout(() => {
+        handleClose();
+      }, 300);
 
       setTimeout(() => {
         window.location.href = `/organization/${slug}`;
       }, 1200);
     } catch (error) {
-      console.error(error);
+      if (isClerkAPIResponseError(error)) {
+        toast.error(error.message);
+      }
+
+      toast.error("Something went wrong");
     } finally {
       form.reset();
     }
