@@ -1,6 +1,7 @@
 import { UserButton } from "@clerk/nextjs";
 import { UserIcon } from "lucide-react";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import { OrganizationSwitcher } from "./organization-switcher";
 
 export function Header() {
   return (
@@ -10,6 +11,7 @@ export function Header() {
           <SidebarTrigger />
         </div>
         <div className="flex items-center gap-2">
+          <OrganizationSwitcher />
           <UserButton
             userProfileMode="navigation"
             userProfileUrl="/profile"
