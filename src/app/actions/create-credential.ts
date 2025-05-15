@@ -22,18 +22,23 @@ export async function createCredential(data: Credential) {
       throw new Error("You must be signed in to add a credential");
     }
 
-    // console.log(`User id: ${userId}`);
-    const { name, description, type, credential: credentialValue } = data;
+    const {
+      name,
+      description,
+      type,
+      credential: credentialValue,
+      organizationId,
+    } = data;
 
     const { error } = await supabase.rpc("save_credential", {
+      p_organization_id: organizationId,
       p_name: name,
       p_type: type,
       p_description: description,
-      p_credential: credentialValue ?? "",
+      p_credential: credentialValue,
     });
 
     if (error) {
-      // console.error(error);
       throw error;
     }
 
