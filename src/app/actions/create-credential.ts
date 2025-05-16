@@ -3,6 +3,7 @@ import { Credential } from "@/types/credentials";
 import { auth } from "@clerk/nextjs/server";
 
 import { createClient } from "@supabase/supabase-js";
+import { revalidatePath } from "next/cache";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -14,7 +15,7 @@ export type FormState = {
   message?: string;
 };
 
-export async function createCredential(data: Credential) {
+export async function createCredential(data: Credential, slug: string) {
   const { userId } = await auth();
 
   try {
@@ -41,6 +42,8 @@ export async function createCredential(data: Credential) {
     if (error) {
       throw error;
     }
+
+    revalidatePath(`/organization/${slug}`);
 
     return {
       ok: true,

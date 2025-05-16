@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff } from "lucide-react";
 import { useOrganization } from "@clerk/nextjs";
 import { toast } from "sonner";
+import { useParams } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -37,6 +38,7 @@ import {
 import { credentialSchema } from "@/app/schemas/new-credential";
 import { createCredential } from "@/app/actions/create-credential";
 import { Credential } from "@/types/credentials";
+import { credentialTypesList } from "@/credential-type-list";
 
 interface AddCredentialFormProps {
   open: boolean;
@@ -47,6 +49,7 @@ export function AddCredentialForm({
   open,
   onOpenChange,
 }: AddCredentialFormProps) {
+  const params = useParams<{ slug: string }>();
   const { organization } = useOrganization();
 
   const [showValue, setShowValue] = useState(false);
@@ -64,9 +67,11 @@ export function AddCredentialForm({
 
   async function onSubmit(data: Credential) {
     data.organizationId = organization!.id as string;
-    const res = await createCredential(data);
+    const slug = params.slug;
+
+    const res = await createCredential(data, slug);
     if (!res.ok) {
-      toast.error(res.message);
+      toast.error(res.errors?.server);
       return;
     }
 
@@ -172,21 +177,11 @@ export function AddCredentialForm({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="api-key">API Key</SelectItem>
-                      <SelectItem value="token">Token</SelectItem>
-                      <SelectItem value="oauth-token">OAuth Token</SelectItem>
-                      <SelectItem value="env-variable">
-                        Environment Variable
-                      </SelectItem>
-                      <SelectItem value="webhook-secret">
-                        Webhook Secret
-                      </SelectItem>
-                      <SelectItem value="client-credentials">
-                        Client ID / Client Secret
-                      </SelectItem>
-                      <SelectItem value="license-key">License Key</SelectItem>
-                      <SelectItem value="password">Password</SelectItem>
-                      <SelectItem value="db-string">Database String</SelectItem>
+                      {credentialTypesList.map((type) => (
+                        <SelectItem key={type.value} value={type.value}>
+                          {type.label}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                   <FormMessage />

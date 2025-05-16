@@ -1,12 +1,18 @@
 "use client";
 
 import { useState } from "react";
+import { Plus } from "lucide-react";
+import { Credential } from "@/types/credentials";
+
+import { Button } from "@/components/ui/button";
 import { DashboardCredentialTable } from "./dashboard-credential-table";
 import { AddCredentialForm } from "./add-credential-form";
-import { Plus } from "lucide-react";
-import { Button } from "./ui/button";
 
-export function CredentialsSection() {
+type CredentialsSectionProps = {
+  data: Credential[];
+};
+
+export function CredentialsSection({ data }: CredentialsSectionProps) {
   const [isAddCredentialOpen, setIsAddCredentialOpen] = useState(false);
 
   return (
@@ -32,7 +38,7 @@ export function CredentialsSection() {
             </Button>
           </div>
 
-          <DashboardCredentialTable />
+          <DashboardCredentialTable data={data} />
         </div>
       </div>
       <AddCredentialForm
