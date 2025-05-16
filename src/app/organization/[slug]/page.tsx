@@ -1,4 +1,6 @@
 import { CredentialsSection } from "@/components/credentials-section";
+import { OrgPermissions } from "@/types/permissions";
+import { auth } from "@clerk/nextjs/server";
 import { createClient } from "@supabase/supabase-js";
 import { notFound } from "next/navigation";
 
@@ -39,9 +41,23 @@ export default async function OrganizationsPage({
     notFound();
   }
 
+  const { has } = await auth();
+
+  const canView = has({ permission: "org:credentials:read" });
+  const canDelete = has({ permission: "org:credentials:delete" });
+  const canUpdate = has({ permission: "org:credentials:update" });
+  const canCreate = has({ permission: "org:credentials:create" });
+
+  const permissions: OrgPermissions = {
+    canView,
+    canCreate,
+    canUpdate,
+    canDelete,
+  };
+
   return (
     <div className="space-y-6">
-      <CredentialsSection data={data} />
+      <CredentialsSection data={data} permissions={permissions} />
     </div>
   );
 }

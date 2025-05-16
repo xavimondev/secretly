@@ -1,6 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import { toast } from "sonner";
+import { Copy, Edit2, Eye, EyeOff, MoreHorizontal, Trash2 } from "lucide-react";
+
+import { credentialTypesList } from "@/credential-type-list";
+import { Credential } from "@/types/credentials";
+import { OrgPermissions } from "@/types/permissions";
+
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -16,19 +23,19 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Copy, Eye, EyeOff, MoreHorizontal, Trash2 } from "lucide-react";
-import { Credential } from "@/types/credentials";
-import { toast } from "sonner";
-import { credentialTypesList } from "@/credential-type-list";
 
 type DashboardCredentialTableProps = {
   data: Credential[];
+  permissions: OrgPermissions;
 };
 
 export function DashboardCredentialTable({
   data,
+  permissions,
 }: DashboardCredentialTableProps) {
   const [visibleValues, setVisibleValues] = useState<number[]>([]);
+  const { canDelete, canUpdate } = permissions;
+  const canSeeActions = canDelete || canUpdate;
 
   const toggleVisibility = (id: number) => {
     setVisibleValues((current) =>
@@ -53,7 +60,9 @@ export function DashboardCredentialTable({
             <TableHead>Type</TableHead>
             <TableHead>Value</TableHead>
             <TableHead>Description</TableHead>
-            <TableHead className="w-[100px]">Actions</TableHead>
+            {canSeeActions && (
+              <TableHead className="w-[100px]">Actions</TableHead>
+            )}
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -124,22 +133,32 @@ export function DashboardCredentialTable({
                   {cre.description}
                 </p>
               </TableCell>
-              <TableCell>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon">
-                      <MoreHorizontal className="h-4 w-4" />
-                      <span className="sr-only">Open menu</span>
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem className="text-destructive">
-                      <Trash2 className="mr-2 h-4 w-4" />
-                      <span>Delete</span>
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </TableCell>
+              {canSeeActions && (
+                <TableCell>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="icon">
+                        <MoreHorizontal className="h-4 w-4" />
+                        <span className="sr-only">Open menu</span>
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      {canUpdate && (
+                        <DropdownMenuItem>
+                          <Edit2 className="mr-2 h-4 w-4" />
+                          <span>Edit</span>
+                        </DropdownMenuItem>
+                      )}
+                      {canDelete && (
+                        <DropdownMenuItem className="text-destructive hover:bg-red-400 hover:text-red-700">
+                          <Trash2 className="mr-2 h-4 w-4" />
+                          <span>Delete</span>
+                        </DropdownMenuItem>
+                      )}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TableCell>
+              )}
             </TableRow>
           ))}
         </TableBody>

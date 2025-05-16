@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import { Plus } from "lucide-react";
+
 import { Credential } from "@/types/credentials";
+import { OrgPermissions } from "@/types/permissions";
 
 import { Button } from "@/components/ui/button";
 import { DashboardCredentialTable } from "./dashboard-credential-table";
@@ -10,10 +12,15 @@ import { AddCredentialForm } from "./add-credential-form";
 
 type CredentialsSectionProps = {
   data: Credential[];
+  permissions: OrgPermissions;
 };
 
-export function CredentialsSection({ data }: CredentialsSectionProps) {
+export function CredentialsSection({
+  data,
+  permissions,
+}: CredentialsSectionProps) {
   const [isAddCredentialOpen, setIsAddCredentialOpen] = useState(false);
+  const { canCreate } = permissions;
 
   return (
     <>
@@ -29,22 +36,26 @@ export function CredentialsSection({ data }: CredentialsSectionProps) {
                 environments.
               </p>
             </div>
-            <Button
-              variant="default"
-              onClick={() => setIsAddCredentialOpen(true)}
-            >
-              <Plus className="mr-2 size-4" />
-              Add Credential
-            </Button>
+            {canCreate && (
+              <Button
+                variant="default"
+                onClick={() => setIsAddCredentialOpen(true)}
+              >
+                <Plus className="mr-2 size-4" />
+                Add Credential
+              </Button>
+            )}
           </div>
 
-          <DashboardCredentialTable data={data} />
+          <DashboardCredentialTable data={data} permissions={permissions} />
         </div>
       </div>
-      <AddCredentialForm
-        open={isAddCredentialOpen}
-        onOpenChange={setIsAddCredentialOpen}
-      />
+      {canCreate && (
+        <AddCredentialForm
+          open={isAddCredentialOpen}
+          onOpenChange={setIsAddCredentialOpen}
+        />
+      )}
     </>
   );
 }

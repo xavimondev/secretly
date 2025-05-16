@@ -42,7 +42,7 @@ export async function createCredential(data: Credential, slug: string) {
     if (error) {
       throw error;
     }
-
+    // TODO: change this to const { orgId } = await auth() because orgId returns active organization
     revalidatePath(`/organization/${slug}`);
 
     return {
