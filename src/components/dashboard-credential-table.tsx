@@ -8,6 +8,7 @@ import { credentialTypesList } from "@/credential-type-list";
 import { Credential } from "@/types/credentials";
 import { OrgPermissions } from "@/types/permissions";
 import { revealCredential } from "@/app/actions/reveal-credential";
+import { deleteCredential } from "@/app/actions/delete-credential";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -77,10 +78,24 @@ export function DashboardCredentialTable({
     updateState(id);
   }
 
-  const copyToClipboard = (value: string) => {
+  function copyToClipboard(value: string) {
     navigator.clipboard.writeText(value);
     toast.info("Credential copied");
-  };
+  }
+
+  async function deleteRow(credentialId: number) {
+    toast.promise(deleteCredential(credentialId), {
+      loading: "Deleting credential",
+      success: (data) => {
+        const { ok, error } = data;
+        if (!ok) {
+          return error;
+        }
+        return "Credential deleted";
+      },
+      error: "Something went wrong",
+    });
+  }
 
   return (
     <div className="rounded-md border">
@@ -102,7 +117,7 @@ export function DashboardCredentialTable({
             <TableRow className="text-center">
               <TableCell colSpan={4}>
                 No credentials found in this organization
-              </TableCell>{" "}
+              </TableCell>
             </TableRow>
           )}
           {data.map((cre) => (
@@ -181,7 +196,10 @@ export function DashboardCredentialTable({
                         </DropdownMenuItem>
                       )}
                       {canDelete && (
-                        <DropdownMenuItem className="text-destructive hover:bg-red-400 hover:text-red-700">
+                        <DropdownMenuItem
+                          className="text-destructive hover:bg-red-400 hover:text-red-700"
+                          onClick={() => deleteRow(cre.id as number)}
+                        >
                           <Trash2 className="mr-2 h-4 w-4" />
                           <span>Delete</span>
                         </DropdownMenuItem>
