@@ -7,6 +7,7 @@ import { Copy, Edit2, Eye, EyeOff, MoreHorizontal, Trash2 } from "lucide-react";
 import { credentialTypesList } from "@/credential-type-list";
 import { Credential } from "@/types/credentials";
 import { OrgPermissions } from "@/types/permissions";
+import { revealCredential } from "@/app/actions/reveal-credential";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -29,21 +30,52 @@ type DashboardCredentialTableProps = {
   permissions: OrgPermissions;
 };
 
+type VaultStore = Record<string, string>;
+
+const DEFAULT_PLACEHOLDER = "********-****-****-************";
+
 export function DashboardCredentialTable({
   data,
   permissions,
 }: DashboardCredentialTableProps) {
   const [visibleValues, setVisibleValues] = useState<number[]>([]);
+  const [vaultStore, setVaultStore] = useState<VaultStore>({});
   const { canDelete, canUpdate } = permissions;
   const canSeeActions = canDelete || canUpdate;
 
-  const toggleVisibility = (id: number) => {
+  function updateState(id: number) {
     setVisibleValues((current) =>
       current.includes(id)
         ? current.filter((credId) => credId !== id)
         : [...current, id]
     );
-  };
+  }
+
+  async function toggleVisibility(id: number, vaultId: string) {
+    const hasCurrentSecret =
+      vaultStore[vaultId] && vaultStore[vaultId] !== DEFAULT_PLACEHOLDER;
+
+    if (hasCurrentSecret) {
+      setVaultStore((vaultStore) => ({
+        ...vaultStore,
+        [vaultId]: DEFAULT_PLACEHOLDER,
+      }));
+      updateState(id);
+      return;
+    }
+
+    const { ok, data, error } = await revealCredential(vaultId);
+    if (!ok) {
+      toast.error(error);
+      return;
+    }
+
+    setVaultStore((vaultStore) => ({
+      ...vaultStore,
+      [vaultId]: data,
+    }));
+    updateState(id);
+  }
 
   const copyToClipboard = (value: string) => {
     navigator.clipboard.writeText(value);
@@ -85,25 +117,20 @@ export function DashboardCredentialTable({
               <TableCell>
                 <div className="flex items-center justify-between">
                   <div
-                    className={`font-mono ${
+                    className={`font-mono max-w-[300px] overflow-hidden text-ellipsis ${
                       visibleValues.includes(cre.id as number)
                         ? ""
                         : "filter blur-sm select-none"
                     }`}
-                    style={{
-                      maxWidth: "200px",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                    }}
                   >
-                    {cre.credential}
+                    {vaultStore[cre.vaultid] ?? DEFAULT_PLACEHOLDER}
                   </div>
                   <div className="flex items-center ml-2 space-x-1">
                     <Button
                       variant="ghost"
                       size="icon"
                       className="h-8 w-8"
-                      onClick={() => toggleVisibility(cre.id!)}
+                      onClick={() => toggleVisibility(cre.id!, cre.vaultid)}
                       aria-label={
                         visibleValues.includes(cre.id!)
                           ? "Hide value"
@@ -120,7 +147,11 @@ export function DashboardCredentialTable({
                       variant="ghost"
                       size="icon"
                       className="h-8 w-8"
-                      onClick={() => copyToClipboard(cre.credential)}
+                      onClick={() =>
+                        copyToClipboard(
+                          vaultStore[cre.vaultid] ?? DEFAULT_PLACEHOLDER
+                        )
+                      }
                       aria-label="Copy to clipboard"
                     >
                       <Copy className="h-4 w-4" />

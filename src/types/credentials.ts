@@ -5,4 +5,5 @@ export type Credential = {
   credential: string;
   type: string;
   description?: string;
+  vaultid: string;
 };
