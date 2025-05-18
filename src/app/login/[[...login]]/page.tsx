@@ -18,8 +18,8 @@ export default function Login() {
       </div>
       <div className="lg:flex items-center justify-center size-full hidden bg-white text-lg sm:text-xl px-24 py-4">
         <span className="text-gray-600">
-          Secretly helps teams manage, rotate, and secure API keys, tokens, and
-          secrets across all your environments.
+          Secretly helps teams manage and secure API keys, tokens, and secrets
+          across all your environments.
         </span>
       </div>
     </div>
