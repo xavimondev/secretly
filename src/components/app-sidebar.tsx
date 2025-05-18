@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
-import { Building2, LayoutDashboard, Lock, LogOut, Shield } from "lucide-react";
+import { Building2, LayoutDashboard, LogOut, Shield } from "lucide-react";
 
 import {
   Sidebar,
@@ -59,7 +59,7 @@ export function AppSidebar() {
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
-              <SidebarMenuItem>
+              {/* <SidebarMenuItem>
                 <SidebarMenuButton
                   asChild
                   isActive={pathname.includes(`/${slug}/access-control`)}
@@ -70,7 +70,7 @@ export function AppSidebar() {
                     <span>Access Control</span>
                   </Link>
                 </SidebarMenuButton>
-              </SidebarMenuItem>
+              </SidebarMenuItem> */}
               <SidebarMenuItem>
                 <SidebarMenuButton asChild tooltip="Profile">
                   <Link href={`/organization/${slug}/profile`}>

@@ -26,6 +26,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { organizationSchema } from "@/app/schemas/new-organization";
+import { generateSlug } from "@/lib/utils";
 
 type AddOrganizationProps = {
   open: boolean;
@@ -35,16 +36,6 @@ type AddOrganizationProps = {
 type Organization = {
   name: string;
 };
-
-function generateSlug(name: string) {
-  return name
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-z0-9\s-]/g, "")
-    .trim()
-    .replace(/\s+/g, "-");
-}
 
 export function AddOrganizationForm({
   open,
