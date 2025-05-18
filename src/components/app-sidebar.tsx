@@ -19,6 +19,7 @@ import {
   SidebarSeparator,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { SignOutButton } from "@clerk/nextjs";
 
 export function AppSidebar() {
   const params = useParams<{ slug: string }>();
@@ -86,10 +87,12 @@ export function AppSidebar() {
         <SidebarSeparator />
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton tooltip="Logout">
-              <LogOut className="w-4 h-4" />
-              <span>Logout</span>
-            </SidebarMenuButton>
+            <SignOutButton>
+              <SidebarMenuButton tooltip="Logout">
+                <LogOut className="w-4 h-4" />
+                <span>Logout</span>
+              </SidebarMenuButton>
+            </SignOutButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>
