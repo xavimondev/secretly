@@ -35,7 +35,10 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { credentialSchema } from "@/app/schemas/new-credential";
+import {
+  CredentialResource,
+  credentialSchema,
+} from "@/app/schemas/new-credential";
 import { createCredential } from "@/app/actions/create-credential";
 import { Credential } from "@/types/credentials";
 import { credentialTypesList } from "@/credential-type-list";
@@ -55,7 +58,7 @@ export function AddCredentialForm({
   const [showValue, setShowValue] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const form = useForm<Credential>({
+  const form = useForm<CredentialResource>({
     resolver: zodResolver(credentialSchema),
     defaultValues: {
       name: "",
@@ -65,11 +68,14 @@ export function AddCredentialForm({
     },
   });
 
-  async function onSubmit(data: Credential) {
-    data.organizationId = organization!.id as string;
+  async function onSubmit(data: CredentialResource) {
+    const credentialDB: Credential = {
+      ...data,
+    };
+    credentialDB.organizationId = organization!.id as string;
     const slug = params.slug;
 
-    const res = await createCredential(data, slug);
+    const res = await createCredential(credentialDB, slug);
     if (!res.ok) {
       toast.error(res.errors?.server);
       return;

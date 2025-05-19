@@ -13,5 +13,7 @@ export const credentialSchema = z.object({
   type: z.string({
     required_error: "Please select a credential type",
   }),
-  description: z.string().optional(),
+  description: z.string(),
 });
+
+export type CredentialResource = z.infer<typeof credentialSchema>;

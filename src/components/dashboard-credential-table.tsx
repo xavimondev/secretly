@@ -138,14 +138,16 @@ export function DashboardCredentialTable({
                         : "filter blur-sm select-none"
                     }`}
                   >
-                    {vaultStore[cre.vaultid] ?? DEFAULT_PLACEHOLDER}
+                    {vaultStore[cre.vaultid as string] && DEFAULT_PLACEHOLDER}
                   </div>
                   <div className="flex items-center ml-2 space-x-1">
                     <Button
                       variant="ghost"
                       size="icon"
                       className="h-8 w-8"
-                      onClick={() => toggleVisibility(cre.id!, cre.vaultid)}
+                      onClick={() =>
+                        toggleVisibility(cre.id!, cre.vaultid as string)
+                      }
                       aria-label={
                         visibleValues.includes(cre.id!)
                           ? "Hide value"
@@ -164,7 +166,8 @@ export function DashboardCredentialTable({
                       className="h-8 w-8"
                       onClick={() =>
                         copyToClipboard(
-                          vaultStore[cre.vaultid] ?? DEFAULT_PLACEHOLDER
+                          vaultStore[cre.vaultid as string] ??
+                            DEFAULT_PLACEHOLDER
                         )
                       }
                       aria-label="Copy to clipboard"
