@@ -22,6 +22,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { AddOrganizationForm } from "./add-organization-form";
+import { saveCurrentOrganizationUrl } from "@/app/actions/save-current-organization";
 
 export function OrganizationSwitcher() {
   // TODO: handle infinite
@@ -39,12 +40,15 @@ export function OrganizationSwitcher() {
   const [openModal, setOpenModal] = useState(false);
   const [openPopover, setOpenPopover] = useState(false);
 
-  function handleSelect(slug: string, orgId: string) {
+  async function handleSelect(slug: string, orgId: string) {
     if (!setActive) return;
 
     setOpenPopover(false);
     setActive({ organization: orgId });
-    router.push(`/organization/${slug}`);
+
+    const redirectUrl = `/organization/${slug}`;
+    await saveCurrentOrganizationUrl(redirectUrl);
+    router.push(redirectUrl);
   }
 
   function handleCreateNew() {

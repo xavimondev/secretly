@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/form";
 import { organizationSchema } from "@/app/schemas/new-organization";
 import { generateSlug } from "@/lib/utils";
+import { saveCurrentOrganizationUrl } from "@/app/actions/save-current-organization";
 
 type AddOrganizationProps = {
   open: boolean;
@@ -69,8 +70,10 @@ export function AddOrganizationForm({
         handleClose();
       }, 300);
 
+      const redirectUrl = `/organization/${slug}`;
+      await saveCurrentOrganizationUrl(redirectUrl);
       setTimeout(() => {
-        window.location.href = `/organization/${slug}`;
+        window.location.href = redirectUrl;
       }, 1200);
     } catch (error) {
       if (isClerkAPIResponseError(error)) {
@@ -126,7 +129,7 @@ export function AddOrganizationForm({
               <Button type="submit" disabled={form.formState.isSubmitting}>
                 {form.formState.isSubmitting
                   ? "Creating..."
-                  : "Create Credential"}
+                  : "Create Organization"}
               </Button>
             </DialogFooter>
           </form>

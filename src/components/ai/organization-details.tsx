@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { OrganizationResource } from "@/types/auth";
 import { useOrganizationList } from "@clerk/nextjs";
+import { saveCurrentOrganizationUrl } from "@/app/actions/save-current-organization";
 
 interface OrganizationCardProps {
   organization: OrganizationResource;
@@ -20,9 +21,12 @@ export function OrganizationDetails({ organization }: OrganizationCardProps) {
   const { setActive } = useOrganizationList();
   const { id, name, slug } = organization;
 
-  function goTo(slug: string) {
+  async function goTo(slug: string) {
     setActive?.({ organization: id });
-    window.location.href = `/organization/${slug}`;
+
+    const redirectUrl = `/organization/${slug}`;
+    await saveCurrentOrganizationUrl(redirectUrl);
+    window.location.href = redirectUrl;
   }
 
   return (
