@@ -138,7 +138,7 @@ export function DashboardCredentialTable({
                         : "filter blur-sm select-none"
                     }`}
                   >
-                    {vaultStore[cre.vaultid as string] && DEFAULT_PLACEHOLDER}
+                    {vaultStore[cre.vaultid as string] || DEFAULT_PLACEHOLDER}
                   </div>
                   <div className="flex items-center ml-2 space-x-1">
                     <Button
@@ -166,7 +166,7 @@ export function DashboardCredentialTable({
                       className="h-8 w-8"
                       onClick={() =>
                         copyToClipboard(
-                          vaultStore[cre.vaultid as string] ??
+                          vaultStore[cre.vaultid as string] ||
                             DEFAULT_PLACEHOLDER
                         )
                       }
