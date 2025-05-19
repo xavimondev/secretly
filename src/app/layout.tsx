@@ -4,6 +4,7 @@ import { JetBrains_Mono } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
 import { Toaster } from "@/components/ui/sonner";
+import { Metadata } from "next/types";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -15,10 +16,35 @@ const jetbrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains",
 });
 
-export const metadata = {
-  title: "Secretly - Secure Credential Management",
-  description:
-    "Secure credential and secrets management for developers and DevOps teams",
+const title = "Secretly - Secure Credential Management";
+const description =
+  "Secure credential and secrets management for developers and DevOps teams";
+
+const APP_URL =
+  process.env.NODE_ENV === "production"
+    ? "https://secretly.vercel.app"
+    : "http://localhost:3000";
+
+export const metadata: Metadata = {
+  metadataBase: new URL(APP_URL),
+  title,
+  description,
+  openGraph: {
+    title,
+    description,
+    url: "/",
+    siteName: "secretly",
+    locale: "en_US",
+    type: "website",
+    images: [
+      {
+        url: "/banner.jpg",
+        width: 1200,
+        height: 630,
+        type: "image/jpeg",
+      },
+    ],
+  },
 };
 
 export default function RootLayout({
