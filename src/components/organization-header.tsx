@@ -2,7 +2,7 @@
 
 import { useOrganization } from "@clerk/nextjs";
 
-export function OrganizationHeader() {
+export function OrganizationHeader({ description }: { description: string }) {
   const { organization } = useOrganization();
 
   return (
@@ -10,9 +10,7 @@ export function OrganizationHeader() {
       <h1 className="text-2xl font-bold tracking-tight">
         {organization?.name}
       </h1>
-      <p className="text-muted-foreground text-sm">
-        Manage organization members and settings
-      </p>
+      <p className="text-muted-foreground text-sm">{description}</p>
     </div>
   );
 }
