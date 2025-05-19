@@ -89,7 +89,7 @@ export function AddOrganizationForm({
   function handleClose() {
     onOpenChange(false);
   }
-  // TODO: handle loading
+
   if (!isLoaded) return null;
 
   return (

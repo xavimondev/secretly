@@ -26,6 +26,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { InvitationFormSkeleton } from "./invitation-form-skeleton";
 
 const inviteSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email address" }),
@@ -53,9 +54,8 @@ export function OrganizationInviteForm() {
     },
   });
 
-  // TODO: handle loading
   if (!isLoaded || !organization) {
-    return <>Loading</>;
+    return <InvitationFormSkeleton />;
   }
 
   async function onSubmit(data: InviteFormValues) {

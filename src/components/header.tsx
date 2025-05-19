@@ -2,11 +2,12 @@
 
 import { useState } from "react";
 import { UserButton } from "@clerk/nextjs";
-import { Bot, UserIcon } from "lucide-react";
+import { Bot } from "lucide-react";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { OrganizationSwitcher } from "./organization-switcher";
 import { Button } from "@/components/ui/button";
 import { ChatBot } from "@/components/chat-bot";
+import { Skeleton } from "./ui/skeleton";
 
 export function Header() {
   const [isChatOpen, setIsChatOpen] = useState(false);
@@ -28,7 +29,7 @@ export function Header() {
           </Button>
           <UserButton
             userProfileMode="modal"
-            fallback={<UserIcon className="size-8" />}
+            fallback={<Skeleton className="rounded-full size-8" />}
           />
         </div>
       </header>

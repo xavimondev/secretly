@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/popover";
 import { AddOrganizationForm } from "./add-organization-form";
 import { saveCurrentOrganizationUrl } from "@/app/actions/save-current-organization";
+import { Skeleton } from "./ui/skeleton";
 
 export function OrganizationSwitcher() {
   // TODO: handle infinite
@@ -55,8 +56,7 @@ export function OrganizationSwitcher() {
     setOpenModal(true);
   }
 
-  // TODO: update loading
-  if (!isLoaded) return null;
+  if (!isLoaded) return <Skeleton className="h-[36px] w-[250px]" />;
 
   const organizationList = userMemberships?.data ?? [];
   const defaultOrganization =
