@@ -25,6 +25,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { EditCredentialForm } from "./edit-credential-form";
+import { EditCredentialResource } from "@/app/schemas/edit-credential";
 
 type DashboardCredentialTableProps = {
   data: Credential[];
@@ -43,6 +45,10 @@ export function DashboardCredentialTable({
   const [vaultStore, setVaultStore] = useState<VaultStore>({});
   const { canDelete, canUpdate } = permissions;
   const canSeeActions = canDelete || canUpdate;
+  const [open, setOpen] = useState(false);
+  const [credentialSelected, setCredentialSelected] = useState<
+    EditCredentialResource | undefined
+  >();
 
   function updateState(id: number) {
     setVisibleValues((current) =>
@@ -98,123 +104,143 @@ export function DashboardCredentialTable({
   }
 
   return (
-    <div className="rounded-md border">
-      {/* TODO: add pagination */}
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Name</TableHead>
-            <TableHead>Type</TableHead>
-            <TableHead>Value</TableHead>
-            <TableHead>Description</TableHead>
-            {canSeeActions && (
-              <TableHead className="w-[100px]">Actions</TableHead>
-            )}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data.length === 0 && (
-            <TableRow className="text-center">
-              <TableCell colSpan={4}>
-                No credentials found in this organization
-              </TableCell>
-            </TableRow>
-          )}
-          {data.map((cre) => (
-            <TableRow key={cre.id}>
-              <TableCell>
-                <div className="font-medium font-mono">{cre.name}</div>
-              </TableCell>
-              <TableCell>
-                {credentialTypesList.find((type) => type.value === cre.type)
-                  ?.label ?? ""}
-              </TableCell>
-              <TableCell>
-                <div className="flex items-center justify-between">
-                  <div
-                    className={`font-mono max-w-[300px] overflow-hidden text-ellipsis ${
-                      visibleValues.includes(cre.id as number)
-                        ? ""
-                        : "filter blur-sm select-none"
-                    }`}
-                  >
-                    {vaultStore[cre.vaultid as string] || DEFAULT_PLACEHOLDER}
-                  </div>
-                  <div className="flex items-center ml-2 space-x-1">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-8 w-8"
-                      onClick={() =>
-                        toggleVisibility(cre.id!, cre.vaultid as string)
-                      }
-                      aria-label={
-                        visibleValues.includes(cre.id!)
-                          ? "Hide value"
-                          : "Show value"
-                      }
-                    >
-                      {visibleValues.includes(cre.id!) ? (
-                        <EyeOff className="h-4 w-4" />
-                      ) : (
-                        <Eye className="h-4 w-4" />
-                      )}
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-8 w-8"
-                      onClick={() =>
-                        copyToClipboard(
-                          vaultStore[cre.vaultid as string] ||
-                            DEFAULT_PLACEHOLDER
-                        )
-                      }
-                      aria-label="Copy to clipboard"
-                    >
-                      <Copy className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </div>
-              </TableCell>
-              <TableCell>
-                <p className="overflow-hidden text-ellipsis">
-                  {cre.description}
-                </p>
-              </TableCell>
+    <>
+      <div className="rounded-md border">
+        {/* TODO: add pagination */}
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Name</TableHead>
+              <TableHead>Type</TableHead>
+              <TableHead>Value</TableHead>
+              <TableHead>Description</TableHead>
               {canSeeActions && (
-                <TableCell>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="icon">
-                        <MoreHorizontal className="h-4 w-4" />
-                        <span className="sr-only">Open menu</span>
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      {canUpdate && (
-                        <DropdownMenuItem>
-                          <Edit2 className="mr-2 h-4 w-4" />
-                          <span>Edit</span>
-                        </DropdownMenuItem>
-                      )}
-                      {canDelete && (
-                        <DropdownMenuItem
-                          className="text-destructive hover:bg-red-400 hover:text-red-700"
-                          onClick={() => deleteRow(cre.id as number)}
-                        >
-                          <Trash2 className="mr-2 h-4 w-4" />
-                          <span>Delete</span>
-                        </DropdownMenuItem>
-                      )}
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </TableCell>
+                <TableHead className="w-[100px]">Actions</TableHead>
               )}
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+          </TableHeader>
+          <TableBody>
+            {data.length === 0 && (
+              <TableRow className="text-center">
+                <TableCell colSpan={4}>
+                  No credentials found in this organization
+                </TableCell>
+              </TableRow>
+            )}
+            {data.map((cre) => (
+              <TableRow key={cre.id}>
+                <TableCell>
+                  <div className="font-medium font-mono">{cre.name}</div>
+                </TableCell>
+                <TableCell>
+                  {credentialTypesList.find((type) => type.value === cre.type)
+                    ?.label ?? ""}
+                </TableCell>
+                <TableCell>
+                  <div className="flex items-center justify-between">
+                    <div
+                      className={`font-mono max-w-[300px] overflow-hidden text-ellipsis ${
+                        visibleValues.includes(cre.id as number)
+                          ? ""
+                          : "filter blur-sm select-none"
+                      }`}
+                    >
+                      {vaultStore[cre.vaultid as string] || DEFAULT_PLACEHOLDER}
+                    </div>
+                    <div className="flex items-center ml-2 space-x-1">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8"
+                        onClick={() =>
+                          toggleVisibility(cre.id!, cre.vaultid as string)
+                        }
+                        aria-label={
+                          visibleValues.includes(cre.id!)
+                            ? "Hide value"
+                            : "Show value"
+                        }
+                      >
+                        {visibleValues.includes(cre.id!) ? (
+                          <EyeOff className="h-4 w-4" />
+                        ) : (
+                          <Eye className="h-4 w-4" />
+                        )}
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8"
+                        onClick={() =>
+                          copyToClipboard(
+                            vaultStore[cre.vaultid as string] ||
+                              DEFAULT_PLACEHOLDER
+                          )
+                        }
+                        aria-label="Copy to clipboard"
+                      >
+                        <Copy className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <p className="overflow-hidden text-ellipsis">
+                    {cre.description}
+                  </p>
+                </TableCell>
+                {canSeeActions && (
+                  <TableCell>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon">
+                          <MoreHorizontal className="h-4 w-4" />
+                          <span className="sr-only">Open menu</span>
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        {canUpdate && (
+                          <DropdownMenuItem
+                            onClick={() => {
+                              setOpen(true);
+                              setCredentialSelected({
+                                id: cre.id as number,
+                                name: cre.name,
+                                type: cre.type,
+                                description: cre.description ?? "",
+                                credential: "TEMP_NONE_VALUE",
+                              });
+                            }}
+                          >
+                            <Edit2 className="mr-2 h-4 w-4" />
+                            <span>Edit</span>
+                          </DropdownMenuItem>
+                        )}
+                        {canDelete && (
+                          <DropdownMenuItem
+                            className="text-destructive hover:bg-red-400 hover:text-red-700"
+                            onClick={() => deleteRow(cre.id as number)}
+                          >
+                            <Trash2 className="mr-2 h-4 w-4" />
+                            <span>Delete</span>
+                          </DropdownMenuItem>
+                        )}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </TableCell>
+                )}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+      {credentialSelected && (
+        <EditCredentialForm
+          open={open}
+          onOpenChange={setOpen}
+          credential={credentialSelected}
+        />
+      )}
+    </>
   );
 }
