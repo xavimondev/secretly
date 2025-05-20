@@ -11,7 +11,7 @@ export function OrganizationsList({ data }: OrganizationsListProps) {
   return (
     <div className="space-y-4">
       <div>
-        <h3 className="text-lg font-medium mb-2">Organizations</h3>
+        <h3 className="font-medium mb-2">Organizations</h3>
         {data && data.length > 0 ? (
           <div className="grid grid-cols-1 gap-3">
             {data.map((org) => (

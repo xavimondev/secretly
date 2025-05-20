@@ -18,12 +18,10 @@ import { RoleUpdateSuccessCard } from "./ai/role-update-sucess-card";
 const PurePreviewMessage = ({
   message,
   isLoading,
-  requiresScrollPadding,
   organizationName,
 }: {
   message: UIMessage;
   isLoading: boolean;
-  requiresScrollPadding: boolean;
   organizationName: string;
 }) => {
   return (
@@ -46,7 +44,7 @@ const PurePreviewMessage = ({
 
           <div
             className={cn("flex flex-col gap-4 w-full", {
-              "min-h-96": message.role === "assistant" && requiresScrollPadding,
+              "min-h-96": message.role === "assistant",
             })}
           >
             {message.parts?.map((part, index) => {
@@ -150,8 +148,8 @@ export const PreviewMessage = memo(
     if (prevProps.isLoading !== nextProps.isLoading) return false;
     if (prevProps.message.id !== nextProps.message.id) return false;
     if (prevProps.organizationName !== nextProps.organizationName) return false;
-    if (prevProps.requiresScrollPadding !== nextProps.requiresScrollPadding)
-      return false;
+    // if (prevProps.requiresScrollPadding !== nextProps.requiresScrollPadding)
+    //   return false;
     if (!equal(prevProps.message.parts, nextProps.message.parts)) return false;
 
     return true;

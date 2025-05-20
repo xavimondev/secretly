@@ -13,7 +13,7 @@ export function UserProfileCard({ user }: UserProfileProps) {
   return (
     <Card className="w-full max-w-2xl mx-auto space-y-3">
       <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center gap-4 pb-2">
-        <Avatar className="size-14 border">
+        <Avatar className="size-10 border">
           <AvatarImage
             src={user.imageUrl || "/placeholder.svg"}
             alt={fullName}
@@ -25,7 +25,7 @@ export function UserProfileCard({ user }: UserProfileProps) {
         </Avatar>
         <div className="space-y-2">
           <CardTitle>{fullName}</CardTitle>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-xs text-muted-foreground">
             {user.email || "No email"}
           </p>
         </div>

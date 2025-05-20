@@ -40,7 +40,7 @@ export function OrganizationMembersList({
   };
 
   return (
-    <div className="w-full space-y-4 max-w-[23.5rem]">
+    <div className="w-full space-y-4 max-w-[26rem]">
       <div className="relative">
         <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
         <Input
@@ -107,53 +107,6 @@ export function OrganizationMembersList({
           </TableBody>
         </Table>
       </div>
-
-      {/* <div className="md:hidden space-y-3">
-        {filteredMembers.length === 0 ? (
-          <div className="text-center text-muted-foreground py-6">
-            No members found
-          </div>
-        ) : (
-          filteredMembers.map((member) => {
-            const { label, color, icon: RoleIcon } = roleConfig[member.role];
-            return (
-              <Card key={member.id}>
-                <CardContent className="p-4">
-                  <div className="flex items-start gap-3">
-                    <Avatar className="mt-1">
-                      <AvatarImage
-                        src={member.imageUrl || "/placeholder.svg"}
-                        alt={`${member.firstName} ${member.lastName}`}
-                      />
-                      <AvatarFallback>
-                        {getInitials(member.firstName, member.lastName)}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className="flex-1 space-y-2">
-                      <div>
-                        <p className="font-medium">{`${member.firstName} ${member.lastName}`}</p>
-                        <p className="text-sm text-muted-foreground">
-                          @{member.username}
-                        </p>
-                      </div>
-                      <p className="text-sm font-mono">{member.email}</p>
-                      <div className="flex items-center justify-between">
-                        <Badge className={`${color}`}>
-                          <RoleIcon className="mr-1 h-3 w-3" />
-                          {label}
-                        </Badge>
-                        <span className="text-xs font-mono text-muted-foreground">
-                          ID: {member.id.substring(0, 8)}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            );
-          })
-        )}
-      </div> */}
 
       {filteredMembers.length > 0 && (
         <>

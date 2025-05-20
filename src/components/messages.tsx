@@ -1,11 +1,10 @@
-import { memo } from "react";
+import { memo, useEffect, useRef } from "react";
 import type { UIMessage } from "ai";
 import { motion } from "framer-motion";
 import { PreviewMessage, ThinkingMessage } from "@/components/message";
 import { Greeting } from "@/components/greeting";
 import equal from "fast-deep-equal";
 import type { UseChatHelpers } from "@ai-sdk/react";
-import { useMessages } from "@/hooks/use-messages";
 
 interface MessagesProps {
   status: UseChatHelpers["status"];
@@ -14,21 +13,14 @@ interface MessagesProps {
 }
 
 function PureMessages({ status, messages, organizationName }: MessagesProps) {
-  const {
-    containerRef: messagesContainerRef,
-    endRef: messagesEndRef,
-    onViewportEnter,
-    onViewportLeave,
-    hasSentMessage,
-  } = useMessages({
-    status,
-  });
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   return (
-    <div
-      ref={messagesContainerRef}
-      className="flex flex-col min-w-0 gap-6 flex-1 overflow-y-scroll pt-4 relative"
-    >
+    <div className="flex flex-col min-w-0 gap-6 flex-1 overflow-y-scroll pt-4 relative">
       {messages.length === 0 && <Greeting />}
 
       {messages.map((message, index) => (
@@ -36,9 +28,6 @@ function PureMessages({ status, messages, organizationName }: MessagesProps) {
           key={message.id}
           message={message}
           isLoading={status === "streaming" && messages.length - 1 === index}
-          requiresScrollPadding={
-            hasSentMessage && index === messages.length - 1
-          }
           organizationName={organizationName}
         />
       ))}
@@ -50,8 +39,6 @@ function PureMessages({ status, messages, organizationName }: MessagesProps) {
       <motion.div
         ref={messagesEndRef}
         className="shrink-0 min-w-[24px] min-h-[24px]"
-        onViewportLeave={onViewportLeave}
-        onViewportEnter={onViewportEnter}
       />
     </div>
   );

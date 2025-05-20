@@ -57,16 +57,9 @@ export function ChatBot({ open, onOpenChange }: ChatBotProps) {
     },
   });
 
-  const messagesEndRef = useRef<HTMLDivElement>(null);
-
-  // Auto-scroll to bottom when messages change
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
-
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent className="w-full sm:max-w-md p-0 flex flex-col h-full">
+      <SheetContent className="w-full sm:max-w-[33rem] p-0 flex flex-col h-full">
         <div className="flex items-center justify-between p-4 border-b">
           <div className="flex items-center gap-4">
             <Bot className="size-6 text-primary" />
@@ -81,7 +74,7 @@ export function ChatBot({ open, onOpenChange }: ChatBotProps) {
           </div>
         </div>
 
-        <div className="flex flex-col min-w-0 h-dvh bg-background">
+        <div className="flex-1 overflow-y-auto p-4 space-y-4">
           <Messages
             status={status}
             messages={messages}

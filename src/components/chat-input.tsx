@@ -56,15 +56,11 @@ export function ChatInput({
   function submitForm() {
     handleSubmit();
     resetHeight();
-
-    // if (width && width > 768) {
-    //   textareaRef.current?.focus();
-    // }
   }
 
   return (
     <div className="p-4">
-      <div className="relative w-full flex flex-col gap-4">
+      <div className="relative w-full flex flex-col gap-4 flex-1">
         {messages.length === 0 && <SuggestedActions append={append} />}
 
         <Textarea
