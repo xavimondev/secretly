@@ -16,11 +16,16 @@ export type FormState = {
 };
 
 export async function createCredential(data: Credential, slug: string) {
-  const { userId } = await auth();
+  const { userId, has } = await auth();
 
   try {
     if (!userId) {
       throw new Error("You must be signed in to add a credential");
+    }
+
+    const canCreate = has({ permission: "org:credentials:create" });
+    if (!canCreate) {
+      throw new Error("You're not authorized to perform this action");
     }
 
     const {
