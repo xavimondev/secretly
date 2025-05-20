@@ -13,7 +13,7 @@ import {
 import { MembersTable } from "./members-table";
 import { TableSkeleton } from "./table-skeleton";
 
-export function OrganizationMembers() {
+export function OrganizationMembers({ orgRole }: { orgRole: string }) {
   const { isLoaded, memberships } = useOrganization({
     memberships: {
       pageSize: 5,
@@ -42,7 +42,7 @@ export function OrganizationMembers() {
         )}
       </CardHeader>
       <CardContent>
-        <MembersTable data={data} memberships={memberships} />
+        <MembersTable data={data} memberships={memberships} orgRole={orgRole} />
       </CardContent>
     </Card>
   );

@@ -25,13 +25,21 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { SelectRole } from "./select-role";
+import { RoleBadge } from "./ai/role-badge";
+import { Badge } from "./ui/badge";
+import { Role } from "@/types/auth";
 
 type MembersTableProps = {
   data: OrganizationMembershipResource[];
   memberships: unknown;
+  orgRole: string;
 };
 
-export function MembersTable({ data, memberships }: MembersTableProps) {
+export function MembersTable({
+  data,
+  memberships,
+  orgRole,
+}: MembersTableProps) {
   const { user } = useUser();
 
   return (
@@ -70,9 +78,7 @@ export function MembersTable({ data, memberships }: MembersTableProps) {
                 </TableCell>
                 <TableCell>{mem.createdAt.toLocaleDateString()}</TableCell>
                 <TableCell>
-                  {mem.publicUserData.userId === user?.id ? (
-                    "Admin"
-                  ) : (
+                  {orgRole === "org:admin" || orgRole === "org:manager" ? (
                     <SelectRole
                       defaultRole={mem.role}
                       onChange={async (role: OrganizationCustomRoleKey) => {
@@ -87,34 +93,47 @@ export function MembersTable({ data, memberships }: MembersTableProps) {
                         }
                       }}
                     />
+                  ) : (
+                    <RoleBadge
+                      role={mem.role as Role}
+                      includeDescription={false}
+                    />
                   )}
                 </TableCell>
                 <TableCell className="text-right">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="sm">
-                        Actions <ChevronDown className="ml-2 h-4 w-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem
-                        className="text-destructive focus:text-destructive"
-                        onClick={async () => {
-                          try {
-                            await mem.destroy();
-                            // @ts-expect-error revalidate
-                            await memberships?.revalidate();
-                          } catch {
-                            toast.error(
-                              "There has to be at least one organization member"
-                            );
-                          }
-                        }}
-                      >
-                        Remove member
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                  {orgRole === "org:admin" || orgRole === "org:manager" ? (
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="sm">
+                          Actions <ChevronDown className="ml-2 h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem
+                          className="text-destructive focus:text-destructive"
+                          onClick={async () => {
+                            try {
+                              await mem.destroy();
+                              // @ts-expect-error revalidate
+                              await memberships?.revalidate();
+                            } catch {
+                              toast.error(
+                                "There has to be at least one organization member"
+                              );
+                            }
+                          }}
+                        >
+                          Remove member
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  ) : (
+                    <Badge
+                      className={`bg-red-100 text-red-700 border-red-200 hover:bg-yellow-200 font-medium`}
+                    >
+                      Not Allwed
+                    </Badge>
+                  )}
                 </TableCell>
               </TableRow>
             ))}
