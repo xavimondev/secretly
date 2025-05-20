@@ -10,14 +10,23 @@ Credentials are securely stored using [**Supabase Vault**](https://supabase.com/
 
 ## 📸 Screenshots
 
-<div align="center">
-  <img src='https://secretly-lovat.vercel.app/images/login.png' width="100%" alt="Login" />
+#### Login
+<img src='https://secretly-lovat.vercel.app/images/login.png' width="100%" alt="Login" />
+
+#### Organization Switcher
   <img src='https://secretly-lovat.vercel.app/images/select-org.png' width="100%" alt="Select org" />
-  <img src='https://secretly-lovat.vercel.app/images/credentials-screen.png' width="100%" alt="Credentials Screen" />
-  <img src='https://secretly-lovat.vercel.app/images/members.png' width="100%" alt="Members Screen" />
-  <img src='https://secretly-lovat.vercel.app/images/invitations.png' width="100%" alt="Invitations Screen" />
-  <img src='https://secretly-lovat.vercel.app/images/ai.png' width="100%" alt="AI Screen" />
-</div>
+
+#### Credentials Dashboard
+<img src='https://secretly-lovat.vercel.app/images/credentials-screen.png' width="100%" alt="Credentials Screen" />
+
+#### Members
+<img src='https://secretly-lovat.vercel.app/images/members.png' width="100%" alt="Members Screen" />
+
+#### Invitations
+<img src='https://secretly-lovat.vercel.app/images/invitations.png' width="100%" alt="Invitations Screen" />
+
+#### AI Bot
+<img src='https://secretly-lovat.vercel.app/images/ai.png' width="100%" alt="AI Screen" />
 
 ## 🔐 Clerk Integration
 
@@ -57,5 +66,7 @@ Secretly integrates a custom chatbot that uses natural language to trigger actio
 
 - Add an organization
 - Show my profile
+- Show organizations I belong to
 - List current organization members
 - Chat-based role modification (e.g., "Change jhon.cena@gmail.com role to developer")
+- Handle invitations(e.g., "Invite jhon.cena@gmail.com with role viewer")
