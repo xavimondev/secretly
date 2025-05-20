@@ -1,6 +1,5 @@
 "use client";
 
-import { useRef, useEffect } from "react";
 import { Bot } from "lucide-react";
 import { ChatInput } from "./chat-input";
 import { useChat } from "@ai-sdk/react";

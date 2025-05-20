@@ -1,3 +1,4 @@
+import { APP_URL } from "@/app/constants";
 import { clerkClient } from "@/lib/clerkClient";
 import { getRoleKey } from "@/lib/utils";
 import { Invitation } from "@/types/auth";
@@ -38,6 +39,7 @@ async function inviteUser(args: {
         organizationId: orgId,
         emailAddress: args.emailAddress,
         role: roleKey,
+        redirectUrl: `${APP_URL}/login`,
       });
 
     return {

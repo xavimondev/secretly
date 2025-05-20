@@ -11,6 +11,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { RoleBadge } from "./ai/role-badge";
+import { Role } from "@/types/auth";
 
 type InvitationsTableProps = {
   data: OrganizationInvitationResource[];
@@ -48,7 +50,12 @@ export function InvitationsTable({
                       <div className="font-medium">{inv.emailAddress}</div>
                     </TableCell>
                     <TableCell>{inv.createdAt.toLocaleDateString()}</TableCell>
-                    <TableCell>{inv.role}</TableCell>
+                    <TableCell>
+                      <RoleBadge
+                        role={inv.role as Role}
+                        includeDescription={false}
+                      />
+                    </TableCell>
                     <TableCell className="text-right">
                       <Button
                         variant="ghost"

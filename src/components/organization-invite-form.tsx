@@ -27,6 +27,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { InvitationFormSkeleton } from "./invitation-form-skeleton";
+import { invite } from "@/app/actions/invite";
 
 const inviteSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email address" }),
@@ -64,12 +65,14 @@ export function OrganizationInviteForm() {
     setIsSubmitting(true);
 
     try {
-      await organization.inviteMember({
-        emailAddress: data.email,
-        role: data.role,
-      });
-      await invitations?.revalidate?.();
+      const { ok, message, error } = await invite(data.email, data.role);
+      if (!ok) {
+        toast.error(error);
+        return;
+      }
 
+      await invitations?.revalidate?.();
+      toast.success(message);
       form.reset();
     } catch {
       toast.error("Something went wrong");

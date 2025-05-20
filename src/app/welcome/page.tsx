@@ -1,18 +1,7 @@
 import { OnboardingOrganizationList } from "@/components/onboarding-organization-list";
 import { Building2 } from "lucide-react";
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 
 export default async function WelcomePage() {
-  const cookieStore = await cookies();
-  const hasRedirectUrlCookie = cookieStore.has("selectedOrganizationUrl");
-
-  if (hasRedirectUrlCookie) {
-    const redirectUrl = cookieStore.get("selectedOrganizationUrl")?.value;
-
-    redirect(decodeURIComponent(redirectUrl as string));
-  }
-
   return (
     <div className="min-h-screen flex flex-col">
       <header className="pt-12 px-4 flex flex-col items-center gap-4 text-center">
