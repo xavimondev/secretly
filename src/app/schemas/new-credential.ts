@@ -1,4 +1,10 @@
+import { credentialTypesList } from "@/credential-type-list";
 import { z } from "zod";
+
+const credentialTypes = credentialTypesList.map((item) => item.value) as [
+  string,
+  ...string[]
+];
 
 export const credentialSchema = z.object({
   name: z
@@ -10,7 +16,7 @@ export const credentialSchema = z.object({
         "Name must contain only uppercase letters, numbers, and underscores",
     }),
   credential: z.string().min(1, { message: "Value is required" }),
-  type: z.string({
+  type: z.enum(credentialTypes, {
     required_error: "Please select a credential type",
   }),
   description: z.string(),
