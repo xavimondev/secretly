@@ -26,7 +26,7 @@ import {
 } from "@/components/ui/table";
 import { SelectRole } from "./select-role";
 import { RoleBadge } from "./ai/role-badge";
-import { Badge } from "./ui/badge";
+import { Badge } from "@/components/ui/badge";
 import { Role } from "@/types/auth";
 
 type MembersTableProps = {

@@ -2,7 +2,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { UseChatHelpers } from "@ai-sdk/react";
 import { UIMessage } from "ai";
 import { useRef } from "react";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 import { Send, StopCircleIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";

@@ -1,8 +1,20 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
+import { useParams } from "next/navigation";
 import { toast } from "sonner";
-import { Copy, Edit2, Eye, EyeOff, MoreHorizontal, Trash2 } from "lucide-react";
+import {
+  Copy,
+  Edit2,
+  Eye,
+  EyeOff,
+  MoreHorizontal,
+  Trash2,
+  UserPlus,
+  Users,
+  X,
+} from "lucide-react";
 
 import { credentialTypesList } from "@/credential-type-list";
 import { Credential } from "@/types/credentials";
@@ -49,6 +61,8 @@ export function DashboardCredentialTable({
   const [credentialSelected, setCredentialSelected] = useState<
     EditCredentialResource | undefined
   >();
+  const [showAlert, setShowAlert] = useState(true);
+  const { slug } = useParams<{ slug: string }>();
 
   function updateState(id: number) {
     setVisibleValues((current) =>
@@ -105,6 +119,35 @@ export function DashboardCredentialTable({
 
   return (
     <>
+      {showAlert && data.length > 0 && (
+        <div className="mb-4 rounded-lg border border-primary/20 bg-primary/5 p-4 flex items-start">
+          <div className="flex-1">
+            <h4 className="font-medium flex items-center gap-2">
+              <Users className="h-5 w-5 text-primary" />
+              Ready to collaborate?
+            </h4>
+            <p className="text-sm mt-1 mb-2">
+              Now that you have credentials set up, invite team members to your
+              organization to start collaborating securely.
+            </p>
+            <Button variant="outline" size="sm" asChild>
+              <Link href={`/organization/${slug}/invitations`}>
+                <UserPlus className="mr-2 h-4 w-4" />
+                Invite Team Members
+              </Link>
+            </Button>
+          </div>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setShowAlert(false)}
+            className="ml-2 -mt-1 h-8 w-8"
+          >
+            <X className="h-4 w-4" />
+          </Button>
+        </div>
+      )}
+
       <div className="rounded-md border">
         {/* TODO: add pagination */}
         <Table>
