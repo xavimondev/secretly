@@ -131,7 +131,7 @@ export function MembersTable({
                     <Badge
                       className={`bg-red-100 text-red-700 border-red-200 hover:bg-yellow-200 font-medium`}
                     >
-                      Not Allwed
+                      Not Allowed
                     </Badge>
                   )}
                 </TableCell>
